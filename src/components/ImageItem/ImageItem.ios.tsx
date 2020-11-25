@@ -26,6 +26,7 @@ import useImageDimensions from "../../hooks/useImageDimensions";
 import { getImageStyles, getImageTransform } from "../../utils";
 import { ImageSource } from "../../@types";
 import { ImageLoading } from "./ImageLoading";
+import PdfItem from "../PdfItem";
 
 const SWIPE_CLOSE_OFFSET = 75;
 const SWIPE_CLOSE_VELOCITY = 1.55;
@@ -34,28 +35,30 @@ const SCREEN_WIDTH = SCREEN.width;
 const SCREEN_HEIGHT = SCREEN.height;
 
 type Props = {
-  imageSrc: ImageSource;
+  image: ImageSource;
   onRequestClose: () => void;
   onZoom: (scaled: boolean) => void;
   onLongPress: (image: ImageSource) => void;
   delayLongPress: number;
   swipeToCloseEnabled?: boolean;
   doubleTapToZoomEnabled?: boolean;
+  webViewSupportedMimeTypes?: string[];
 };
 
 const ImageItem = ({
-  imageSrc,
+  image,
   onZoom,
   onRequestClose,
   onLongPress,
   delayLongPress,
   swipeToCloseEnabled = true,
   doubleTapToZoomEnabled = true,
+  webViewSupportedMimeTypes
 }: Props) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [loaded, setLoaded] = useState(false);
   const [scaled, setScaled] = useState(false);
-  const imageDimensions = useImageDimensions(imageSrc);
+  const imageDimensions = useImageDimensions(image);
   const handleDoubleTap = useDoubleTapToZoom(scrollViewRef, scaled, SCREEN);
 
   const [translate, scale] = getImageTransform(imageDimensions, SCREEN);
@@ -108,9 +111,9 @@ const ImageItem = ({
 
   const onLongPressHandler = useCallback(
     (event: GestureResponderEvent) => {
-      onLongPress(imageSrc);
+      onLongPress(image.uri);
     },
-    [imageSrc, onLongPress]
+    [image, onLongPress]
   );
 
   return (
@@ -137,11 +140,15 @@ const ImageItem = ({
           onLongPress={onLongPressHandler}
           delayLongPress={delayLongPress}
         >
-          <Animated.Image
-            source={imageSrc}
-            style={imageStylesWithOpacity}
-            onLoad={() => setLoaded(true)}
-          />
+          {webViewSupportedMimeTypes?.includes(image.mimetype) ? (
+            <PdfItem file={image} onLoad={() => setLoaded(true)} />
+          ) : (
+            <Animated.Image
+              source={{ uri: image.uri }}
+              style={imageStylesWithOpacity}
+              onLoad={() => setLoaded(true)}
+            />
+          )}
         </TouchableWithoutFeedback>
       </ScrollView>
     </View>

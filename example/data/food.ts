@@ -41,6 +41,17 @@ export const food = [
     thumbnail:
       "https://images.unsplash.com/photo-1541795795328-f073b763494e?ixlib=rb-1.2.1&auto=format&fit=crop&w=934&q=80",
     original:
-      "https://images.unsplash.com/photo-1541795795328-f073b763494e?ixlib=rb-1.2.1&auto=format&fit=crop&w=2734&q=80"
+      "https://images.unsplash.com/photo-1541795795328-f073b763494e?ixlib=rb-1.2.1&auto=format&fit=crop&w=2734&q=80",
+    preview: "https://process.filestackapi.com/ARchbQXoQ5mRaOh6Yn4cqz/output=f:jpg/resize=width:670,height:699,fit:crop/https://cdn.filestackcontent.com/HysTdvZsSY6ATJcuJ3WR"
+  },
+  {
+    thumbnail:
+    "https://images.unsplash.com/photo-1478145046317-39f10e56b5e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2734&q=80",
+    preview:
+    "https://process.filestackapi.com/ARchbQXoQ5mRaOh6Yn4cqz/output=f:jpg/resize=width:670,height:699,fit:crop/https://cdn.filestackcontent.com/HysTdvZsSY6ATJcuJ3WR",
+    mimetype:"application/pdf",
+    original:
+    "https://cdn.filestackcontent.com/HysTdvZsSY6ATJcuJ3WR",
+    filename:"test.pdf"
   }
 ];

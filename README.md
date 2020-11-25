@@ -30,6 +30,15 @@ npm install --save react-native-image-viewing
 ```
 
 ## Usage
+Data structure:
+
+
+| key               | value                                                                                         |  Required |
+| ------------------------ | --------------------------------------------------------------------------------------------------- |  -------- |
+| `uri`                 | Image URI                                                                          |  true     |
+| `filename`             | Name of file with extension. Name will be shown in share feature                                                                   |  true     |
+| `mimetype`             | Required for iOS devices to show documents in `WebView`                                                                   |  false     |
+| `preview`             | Preview image of document. Required only for Android devices for files which mimetype is other than `image`             |  false     |
 
 ```jsx
 import ImageView from "react-native-image-viewing";
@@ -37,13 +46,14 @@ import ImageView from "react-native-image-viewing";
 const images = [
   {
     uri: "https://images.unsplash.com/photo-1571501679680-de32f1e7aad4",
+    filename:"photo.jpeg",
   },
   {
     uri: "https://images.unsplash.com/photo-1573273787173-0eb81a833b34",
-  },
-  {
-    uri: "https://images.unsplash.com/photo-1569569970363-df7b6160d111",
-  },
+    preview:"https://process.filestackapi.com/ARchbQXoQ5mRaOh6Yn4cqz/output=f:jpg/resize=width:670,height:700,fit:crop/https://cdn.filestackcontent.com/HysTdvZsSY6ATJcuJ3WR",
+    filename:"test.pdf",
+    mimetype:"application/pdf"
+  }
 ];
 
 const [visible, setIsVisible] = useState(false);
@@ -76,6 +86,8 @@ const [visible, setIsVisible] = useState(false);
 | `doubleTapToZoomEnabled` | Zoom image by double tap on it: default `true`                                                      | boolean                                                     | false    |
 | `HeaderComponent`        | Header component, gets current `imageIndex` as a prop                                               | component, function                                         | false    |
 | `FooterComponent`        | Footer component, gets current `imageIndex` as a prop                                               | component, function                                         | false    |
+| `webViewSupportedMimeTypes`        | Array of mimetypes for which iOS should use `WebView` for display file/document. Default `['application/pdf']`           | string[]                                                    | false    |
+| `ShareIcon`        | Array of mimetypes for which iOS should use `WebView` for display file/document. Default `<Text>v</Text>`           | component                                                    | false    |
 
 - type ImageSource = ImageURISource | ImageRequireSource
 

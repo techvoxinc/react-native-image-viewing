@@ -30,17 +30,18 @@ const SCREEN_WIDTH = SCREEN.width;
 const SCREEN_HEIGHT = SCREEN.height;
 
 type Props = {
-  imageSrc: ImageSource;
+  image: ImageSource;
   onRequestClose: () => void;
   onZoom: (isZoomed: boolean) => void;
   onLongPress: (image: ImageSource) => void;
   delayLongPress: number;
   swipeToCloseEnabled?: boolean;
   doubleTapToZoomEnabled?: boolean;
+  webViewSupportedMimeTypes?: string[];
 };
 
 const ImageItem = ({
-  imageSrc,
+  image,
   onZoom,
   onRequestClose,
   onLongPress,
@@ -49,7 +50,7 @@ const ImageItem = ({
   doubleTapToZoomEnabled = true,
 }: Props) => {
   const imageContainer = React.createRef<any>();
-  const imageDimensions = useImageDimensions(imageSrc);
+  const imageDimensions = useImageDimensions(image);
   const [translate, scale] = getImageTransform(imageDimensions, SCREEN);
   const scrollValueY = new Animated.Value(0);
   const [isLoaded, setLoadEnd] = useState(false);
@@ -66,8 +67,8 @@ const ImageItem = ({
   };
 
   const onLongPressHandler = useCallback(() => {
-    onLongPress(imageSrc);
-  }, [imageSrc, onLongPress]);
+    onLongPress(image);
+  }, [image, onLongPress]);
 
   const [panHandlers, scaleValue, translateValue] = usePanResponder({
     initialScale: scale || 1,
@@ -127,12 +128,12 @@ const ImageItem = ({
         onScrollEndDrag,
       })}
     >
-      <Animated.Image
-        {...panHandlers}
-        source={imageSrc}
-        style={imageStylesWithOpacity}
-        onLoad={onLoaded}
-      />
+        <Animated.Image
+          {...panHandlers}
+          source={{ uri: image.preview || image.uri  }}
+          style={imageStylesWithOpacity}
+          onLoad={onLoaded}
+        />
       {(!isLoaded || !imageDimensions) && <ImageLoading />}
     </Animated.ScrollView>
   );
