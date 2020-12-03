@@ -51,8 +51,8 @@ const ImageDefaultHeader = ({
       callback
     );
     try {
-      const { uri } = await downloadResumable.downloadAsync();
-      await Sharing.shareAsync(uri);
+      const res = await downloadResumable.downloadAsync();
+      res && await Sharing.shareAsync(res.uri);
     } catch (e) {}
   };
 
