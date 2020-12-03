@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/techvoxinc/react-native-image-viewing.git"
+    "url": "git+https://github.com/techvoxinc/react-native-image-viewing.git"
   },
   "keywords": [
     "react",
@@ -49,5 +49,8 @@
     "expo-media-library": "^9.2.1",
     "expo-sharing": "^8.4.1",
     "react-native-webview": "^10.10.0"
+  },
+  "directories": {
+    "example": "example"
   }
 }
