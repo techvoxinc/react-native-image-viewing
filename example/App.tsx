@@ -13,15 +13,12 @@ import {
   SafeAreaView,
   StatusBar,
   StyleSheet,
-  Text,
-  View,
+  View
 } from "react-native";
-import get from "lodash/get";
 import memoize from "lodash/memoize";
 
 import ImageViewing from "../src/ImageViewing";
 import ImageList from "./components/ImageList";
-import ImageHeader from "./components/ImageHeader";
 import ImageFooter from "./components/ImageFooter";
 
 import { architecture } from "./data/architecture";
@@ -47,7 +44,7 @@ export default function App() {
     images.map((image) =>
       typeof image.original === "number"
         ? image.original
-        : { uri: image.original as string }
+        : {...image, uri: image.original as string}
     )
   );
   const onLongPress = (image) => {
@@ -67,7 +64,7 @@ export default function App() {
         shift={0.75}
       />
       <View style={styles.about}>
-        <Text style={styles.name}>[ react-native-image-viewing ]</Text>
+
       </View>
       <ImageViewing
         images={getImageSource(images)}
@@ -76,16 +73,8 @@ export default function App() {
         visible={isVisible}
         onRequestClose={onRequestClose}
         onLongPress={onLongPress}
-        HeaderComponent={
-          images === travel
-            ? ({ imageIndex }) => {
-                const title = get(images, `${imageIndex}.title`);
-                return (
-                  <ImageHeader title={title} onRequestClose={onRequestClose} />
-                );
-              }
-            : undefined
-        }
+        webViewSupportedMimeTypes={["application/pdf"]}
+        ShareIcon={undefined}
         FooterComponent={({ imageIndex }) => (
           <ImageFooter imageIndex={imageIndex} imagesCount={images.length} />
         )}

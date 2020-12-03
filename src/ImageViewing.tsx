@@ -41,6 +41,8 @@ type Props = {
   delayLongPress?: number;
   HeaderComponent?: ComponentType<{ imageIndex: number }>;
   FooterComponent?: ComponentType<{ imageIndex: number }>;
+  webViewSupportedMimeTypes: string[],
+  ShareIcon: ComponentType<{}>;
 };
 
 const DEFAULT_ANIMATION_TYPE = "fade";
@@ -64,6 +66,8 @@ function ImageViewing({
   delayLongPress = DEFAULT_DELAY_LONG_PRESS,
   HeaderComponent,
   FooterComponent,
+  webViewSupportedMimeTypes = ["application/pdf"],
+  ShareIcon
 }: Props) {
   const imageList = React.createRef<VirtualizedList<ImageSource>>();
   const [opacity, onRequestCloseEnhanced] = useRequestClose(onRequestClose);
@@ -113,7 +117,7 @@ function ImageViewing({
               })
             )
             : (
-              <ImageDefaultHeader onRequestClose={onRequestCloseEnhanced} />
+              <ImageDefaultHeader onRequestClose={onRequestCloseEnhanced} image={images[currentImageIndex]} ShareIcon={ShareIcon} />
             )}
         </Animated.View>
         <VirtualizedList
@@ -134,20 +138,21 @@ function ImageViewing({
             offset: SCREEN_WIDTH * index,
             index,
           })}
-          renderItem={({ item: imageSrc }) => (
+          renderItem={({ item: image }) => (
             <ImageItem
               onZoom={onZoom}
-              imageSrc={imageSrc}
+              image={image}
               onRequestClose={onRequestCloseEnhanced}
               onLongPress={onLongPress}
               delayLongPress={delayLongPress}
               swipeToCloseEnabled={swipeToCloseEnabled}
               doubleTapToZoomEnabled={doubleTapToZoomEnabled}
+              webViewSupportedMimeTypes={webViewSupportedMimeTypes}
             />
           )}
           onMomentumScrollEnd={onScroll}
           //@ts-ignore
-          keyExtractor={(imageSrc) => imageSrc.uri || `${imageSrc}`}
+          keyExtractor={(image) => image.uri || `${image}`}
         />
         {typeof FooterComponent !== "undefined" && (
           <Animated.View
