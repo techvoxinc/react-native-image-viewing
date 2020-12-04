@@ -19,6 +19,7 @@ import {
 
 import ImageItem from "./components/ImageItem/ImageItem";
 import ImageDefaultHeader from "./components/ImageDefaultHeader";
+import ImageDefaultFooter from "./components/ImageDefaultFooter";
 import StatusBarManager from "./components/StatusBarManager";
 
 import useAnimatedComponents from "./hooks/useAnimatedComponents";
@@ -41,7 +42,7 @@ type Props = {
   delayLongPress?: number;
   HeaderComponent?: ComponentType<{ imageIndex: number }>;
   FooterComponent?: ComponentType<{ imageIndex: number }>;
-  webViewSupportedMimeTypes: string[],
+  webViewSupportedMimeTypes: string[];
   ShareIcon: ComponentType<{}>;
 };
 
@@ -67,7 +68,7 @@ function ImageViewing({
   HeaderComponent,
   FooterComponent,
   webViewSupportedMimeTypes = ["application/pdf"],
-  ShareIcon
+  ShareIcon,
 }: Props) {
   const imageList = React.createRef<VirtualizedList<ImageSource>>();
   const [opacity, onRequestCloseEnhanced] = useRequestClose(onRequestClose);
@@ -90,7 +91,7 @@ function ImageViewing({
       imageList?.current?.setNativeProps({ scrollEnabled: !isScaled });
       toggleBarsVisible(!isScaled);
     },
-    [imageList],
+    [imageList]
   );
 
   if (!visible) {
@@ -110,15 +111,17 @@ function ImageViewing({
       <StatusBarManager presentationStyle={presentationStyle} />
       <View style={[styles.container, { opacity, backgroundColor }]}>
         <Animated.View style={[styles.header, { transform: headerTransform }]}>
-          {typeof HeaderComponent !== "undefined"
-            ? (
-              React.createElement(HeaderComponent, {
-                imageIndex: currentImageIndex,
-              })
-            )
-            : (
-              <ImageDefaultHeader onRequestClose={onRequestCloseEnhanced} image={images[currentImageIndex]} ShareIcon={ShareIcon} />
-            )}
+          {typeof HeaderComponent !== "undefined" ? (
+            React.createElement(HeaderComponent, {
+              imageIndex: currentImageIndex,
+            })
+          ) : (
+            <ImageDefaultHeader
+              onRequestClose={onRequestCloseEnhanced}
+              image={images[currentImageIndex]}
+              ShareIcon={ShareIcon}
+            />
+          )}
         </Animated.View>
         <VirtualizedList
           ref={imageList}
@@ -154,7 +157,7 @@ function ImageViewing({
           //@ts-ignore
           keyExtractor={(image) => image.uri || `${image}`}
         />
-        {typeof FooterComponent !== "undefined" && (
+        {typeof FooterComponent !== "undefined" ? (
           <Animated.View
             style={[styles.footer, { transform: footerTransform }]}
           >
@@ -162,6 +165,11 @@ function ImageViewing({
               imageIndex: currentImageIndex,
             })}
           </Animated.View>
+        ) : (
+          <ImageDefaultFooter
+            imageIndex={currentImageIndex}
+            imagesCount={images.length}
+          />
         )}
       </View>
     </Modal>
