@@ -6,7 +6,7 @@
  *
  */
 
-import React, { ComponentType, useCallback, useRef, useEffect } from "react";
+import React, { ComponentType, useCallback, useEffect } from 'react';
 import {
   Animated,
   Dimensions,
@@ -14,45 +14,46 @@ import {
   View,
   VirtualizedList,
   ModalProps,
-  Modal,
-} from "react-native";
+  Modal
+} from 'react-native';
 
-import ImageItem from "./components/ImageItem/ImageItem";
-import ImageDefaultHeader from "./components/ImageDefaultHeader";
-import StatusBarManager from "./components/StatusBarManager";
+import ImageItem from './components/ImageItem/ImageItem';
+import ImageDefaultHeader from './components/ImageDefaultHeader';
+import ImageDefaultFooter from './components/ImageDefaultFooter';
+import StatusBarManager from './components/StatusBarManager';
 
-import useAnimatedComponents from "./hooks/useAnimatedComponents";
-import useImageIndexChange from "./hooks/useImageIndexChange";
-import useRequestClose from "./hooks/useRequestClose";
-import { ImageSource } from "./@types";
+import useAnimatedComponents from './hooks/useAnimatedComponents';
+import useImageIndexChange from './hooks/useImageIndexChange';
+import useRequestClose from './hooks/useRequestClose';
+import { ImageSource } from './@types';
 
 type Props = {
   images: ImageSource[];
-  keyExtractor?: (imageSrc: ImageSource, index: number) => string;
   imageIndex: number;
   visible: boolean;
   onRequestClose: () => void;
   onLongPress?: (image: ImageSource) => void;
   onImageIndexChange?: (imageIndex: number) => void;
-  presentationStyle?: ModalProps["presentationStyle"];
-  animationType?: ModalProps["animationType"];
+  presentationStyle?: ModalProps['presentationStyle'];
+  animationType?: ModalProps['animationType'];
   backgroundColor?: string;
   swipeToCloseEnabled?: boolean;
   doubleTapToZoomEnabled?: boolean;
   delayLongPress?: number;
   HeaderComponent?: ComponentType<{ imageIndex: number }>;
   FooterComponent?: ComponentType<{ imageIndex: number }>;
+  webViewSupportedMimeTypes: string[];
+  ShareIcon: ComponentType<{}>;
 };
 
-const DEFAULT_ANIMATION_TYPE = "fade";
-const DEFAULT_BG_COLOR = "#000";
+const DEFAULT_ANIMATION_TYPE = 'fade';
+const DEFAULT_BG_COLOR = '#000';
 const DEFAULT_DELAY_LONG_PRESS = 800;
-const SCREEN = Dimensions.get("screen");
+const SCREEN = Dimensions.get('screen');
 const SCREEN_WIDTH = SCREEN.width;
 
 function ImageViewing({
   images,
-  keyExtractor,
   imageIndex,
   visible,
   onRequestClose,
@@ -66,8 +67,10 @@ function ImageViewing({
   delayLongPress = DEFAULT_DELAY_LONG_PRESS,
   HeaderComponent,
   FooterComponent,
+  webViewSupportedMimeTypes = ['application/pdf'],
+  ShareIcon
 }: Props) {
-  const imageList = useRef<VirtualizedList<ImageSource>>(null);
+  const imageList = React.createRef<VirtualizedList<ImageSource>>();
   const [opacity, onRequestCloseEnhanced] = useRequestClose(onRequestClose);
   const [currentImageIndex, onScroll] = useImageIndexChange(imageIndex, SCREEN);
   const [headerTransform, footerTransform, toggleBarsVisible] =
@@ -94,23 +97,27 @@ function ImageViewing({
 
   return (
     <Modal
-      transparent={presentationStyle === "overFullScreen"}
+      transparent={presentationStyle === 'overFullScreen'}
       visible={visible}
       presentationStyle={presentationStyle}
       animationType={animationType}
       onRequestClose={onRequestCloseEnhanced}
-      supportedOrientations={["portrait"]}
+      supportedOrientations={['portrait']}
       hardwareAccelerated
     >
       <StatusBarManager presentationStyle={presentationStyle} />
       <View style={[styles.container, { opacity, backgroundColor }]}>
         <Animated.View style={[styles.header, { transform: headerTransform }]}>
-          {typeof HeaderComponent !== "undefined" ? (
+          {typeof HeaderComponent !== 'undefined' ? (
             React.createElement(HeaderComponent, {
-              imageIndex: currentImageIndex,
+              imageIndex: currentImageIndex
             })
           ) : (
-            <ImageDefaultHeader onRequestClose={onRequestCloseEnhanced} />
+            <ImageDefaultHeader
+              onRequestClose={onRequestCloseEnhanced}
+              image={images[currentImageIndex]}
+              ShareIcon={ShareIcon}
+            />
           )}
         </Animated.View>
         <VirtualizedList
@@ -129,37 +136,37 @@ function ImageViewing({
           getItemLayout={(_, index) => ({
             length: SCREEN_WIDTH,
             offset: SCREEN_WIDTH * index,
-            index,
+            index
           })}
-          renderItem={({ item: imageSrc }) => (
+          renderItem={({ item: image }) => (
             <ImageItem
               onZoom={onZoom}
-              imageSrc={imageSrc}
+              image={image}
               onRequestClose={onRequestCloseEnhanced}
               onLongPress={onLongPress}
               delayLongPress={delayLongPress}
               swipeToCloseEnabled={swipeToCloseEnabled}
               doubleTapToZoomEnabled={doubleTapToZoomEnabled}
+              webViewSupportedMimeTypes={webViewSupportedMimeTypes}
             />
           )}
           onMomentumScrollEnd={onScroll}
           //@ts-ignore
-          keyExtractor={(imageSrc, index) =>
-            keyExtractor
-              ? keyExtractor(imageSrc, index)
-              : typeof imageSrc === "number"
-              ? `${imageSrc}`
-              : imageSrc.uri
-          }
+          keyExtractor={(image) => image.uri || `${image}`}
         />
-        {typeof FooterComponent !== "undefined" && (
+        {typeof FooterComponent !== 'undefined' ? (
           <Animated.View
             style={[styles.footer, { transform: footerTransform }]}
           >
             {React.createElement(FooterComponent, {
-              imageIndex: currentImageIndex,
+              imageIndex: currentImageIndex
             })}
           </Animated.View>
+        ) : (
+          <ImageDefaultFooter
+            imageIndex={currentImageIndex}
+            imagesCount={images.length}
+          />
         )}
       </View>
     </Modal>
@@ -169,20 +176,20 @@ function ImageViewing({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#000",
+    backgroundColor: '#000'
   },
   header: {
-    position: "absolute",
-    width: "100%",
+    position: 'absolute',
+    width: '100%',
     zIndex: 1,
-    top: 0,
+    top: 0
   },
   footer: {
-    position: "absolute",
-    width: "100%",
+    position: 'absolute',
+    width: '100%',
     zIndex: 1,
-    bottom: 0,
-  },
+    bottom: 0
+  }
 });
 
 const EnhancedImageViewing = (props: Props) => (

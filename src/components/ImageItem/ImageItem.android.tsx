@@ -6,16 +6,14 @@
  *
  */
 
-import React, { useCallback, useRef, useState } from "react";
+import React, { useState, useCallback } from "react";
 
 import {
   Animated,
-  ScrollView,
   Dimensions,
   StyleSheet,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  NativeMethodsMixin,
 } from "react-native";
 
 import useImageDimensions from "../../hooks/useImageDimensions";
@@ -32,17 +30,18 @@ const SCREEN_WIDTH = SCREEN.width;
 const SCREEN_HEIGHT = SCREEN.height;
 
 type Props = {
-  imageSrc: ImageSource;
+  image: ImageSource;
   onRequestClose: () => void;
   onZoom: (isZoomed: boolean) => void;
   onLongPress: (image: ImageSource) => void;
   delayLongPress: number;
   swipeToCloseEnabled?: boolean;
   doubleTapToZoomEnabled?: boolean;
+  webViewSupportedMimeTypes?: string[];
 };
 
 const ImageItem = ({
-  imageSrc,
+  image,
   onZoom,
   onRequestClose,
   onLongPress,
@@ -50,28 +49,26 @@ const ImageItem = ({
   swipeToCloseEnabled = true,
   doubleTapToZoomEnabled = true,
 }: Props) => {
-  const imageContainer = useRef<ScrollView & NativeMethodsMixin>(null);
-  const imageDimensions = useImageDimensions(imageSrc);
+  const imageContainer = React.createRef<any>();
+  const imageDimensions = useImageDimensions(image);
   const [translate, scale] = getImageTransform(imageDimensions, SCREEN);
   const scrollValueY = new Animated.Value(0);
   const [isLoaded, setLoadEnd] = useState(false);
 
   const onLoaded = useCallback(() => setLoadEnd(true), []);
-  const onZoomPerformed = useCallback(
-    (isZoomed: boolean) => {
-      onZoom(isZoomed);
-      if (imageContainer?.current) {
-        imageContainer.current.setNativeProps({
-          scrollEnabled: !isZoomed,
-        });
-      }
-    },
-    [imageContainer]
-  );
+  const onZoomPerformed = (isZoomed: boolean) => {
+    onZoom(isZoomed);
+    if (imageContainer?.current) {
+      // @ts-ignore
+      imageContainer.current.setNativeProps({
+        scrollEnabled: !isZoomed,
+      });
+    }
+  };
 
   const onLongPressHandler = useCallback(() => {
-    onLongPress(imageSrc);
-  }, [imageSrc, onLongPress]);
+    onLongPress(image);
+  }, [image, onLongPress]);
 
   const [panHandlers, scaleValue, translateValue] = usePanResponder({
     initialScale: scale || 1,
@@ -117,7 +114,7 @@ const ImageItem = ({
   };
 
   return (
-    <ScrollView
+    <Animated.ScrollView
       ref={imageContainer}
       style={styles.listItem}
       pagingEnabled
@@ -131,14 +128,14 @@ const ImageItem = ({
         onScrollEndDrag,
       })}
     >
-      <Animated.Image
-        {...panHandlers}
-        source={imageSrc}
-        style={imageStylesWithOpacity}
-        onLoad={onLoaded}
-      />
+        <Animated.Image
+          {...panHandlers}
+          source={{ uri: image.preview || image.uri  }}
+          style={imageStylesWithOpacity}
+          onLoad={onLoaded}
+        />
       {(!isLoaded || !imageDimensions) && <ImageLoading />}
-    </ScrollView>
+    </Animated.ScrollView>
   );
 };
 
