@@ -33,7 +33,7 @@ const ImageDefaultHeader = ({
   ShareIcon = <Text style={styles.closeText}>v</Text>,
 }: Props) => {
   const [loading, setLoading] = useState(false);
-  const COLOR_WHITE = '#FFF'
+  const COLOR_WHITE = "#FFF";
 
   const callback = (downloadProgress: any) => {
     const progress =
@@ -43,7 +43,6 @@ const ImageDefaultHeader = ({
   };
 
   const shareFile = async (image: any) => {
-    console.log('image', image)
     const downloadResumable = FileSystem.createDownloadResumable(
       image.uri,
       `${FileSystem.documentDirectory}${image.filename}`,
@@ -52,7 +51,7 @@ const ImageDefaultHeader = ({
     );
     try {
       const res = await downloadResumable.downloadAsync();
-      res && await Sharing.shareAsync(res.uri);
+      res && (await Sharing.shareAsync(res.uri));
     } catch (e) {}
   };
 
@@ -62,7 +61,7 @@ const ImageDefaultHeader = ({
         <View style={styles.space} />
         {loading ? (
           <View style={styles.closeButton}>
-            <ActivityIndicator color={COLOR_WHITE}/>
+            <ActivityIndicator color={COLOR_WHITE} />
           </View>
         ) : (
           <TouchableOpacity

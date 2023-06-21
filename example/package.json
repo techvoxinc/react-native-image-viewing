@@ -8,22 +8,22 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "^38.0.0",
-    "expo-file-system": "^9.2.0",
-    "expo-media-library": "^9.2.1",
-    "expo-sharing": "^8.4.1",
+    "expo": "48.0.6",
+    "expo-file-system": "15.2.2",
+    "expo-media-library": "^15.2.3",
+    "expo-sharing": "^11.2.2",
     "install": "^0.13.0",
-    "react": "16.11.0",
-    "react-dom": "16.11.0",
-    "react-native": "^0.63.3",
-    "react-native-web": "~0.11.7",
-    "react-native-webview": "^10.10.2"
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.71.4",
+    "react-native-web": "~0.18.12",
+    "react-native-webview": "^11.23.1"
   },
   "devDependencies": {
-    "@types/react": "~16.9.41",
-    "@types/react-native": "~0.62.13",
-    "babel-preset-expo": "^8.2.3",
-    "typescript": "~3.9.5"
+    "@types/react": "18.0.28",
+    "@types/react-native": "0.71.4",
+    "babel-preset-expo": "9.3.0",
+    "typescript": "5.0.4"
   },
   "private": true
 }
