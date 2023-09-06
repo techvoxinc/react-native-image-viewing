@@ -144,7 +144,7 @@ const ImageItem = ({
             <PdfItem file={image} onLoad={() => setLoaded(true)} />
           ) : (
             <Animated.Image
-              source={{ uri: image.uri }}
+              source={{ uri: image.preview || image.uri }}
               style={imageStylesWithOpacity}
               onLoad={() => setLoaded(true)}
             />
