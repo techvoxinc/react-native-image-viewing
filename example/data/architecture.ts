@@ -22,7 +22,8 @@ export const architecture = [
   {
     thumbnail:
       "https://images.unsplash.com/photo-1481026469463-66327c86e544?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1424&q=80",
-    original: require("./architecture.jpg"),
+    original:
+      "https://images.unsplash.com/photo-1486718448742-163732cd1544?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2734&q=80",
   },
   {
     thumbnail:

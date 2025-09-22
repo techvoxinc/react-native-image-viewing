@@ -73,11 +73,8 @@ function ImageViewing({
   const imageList = React.createRef<VirtualizedList<ImageSource>>();
   const [opacity, onRequestCloseEnhanced] = useRequestClose(onRequestClose);
   const [currentImageIndex, onScroll] = useImageIndexChange(imageIndex, SCREEN);
-  const [
-    headerTransform,
-    footerTransform,
-    toggleBarsVisible,
-  ] = useAnimatedComponents();
+  const [headerTransform, footerTransform, toggleBarsVisible] =
+    useAnimatedComponents();
 
   useEffect(() => {
     if (onImageIndexChange) {
@@ -134,14 +131,14 @@ function ImageViewing({
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           initialScrollIndex={imageIndex}
-          getItem={(_, index) => images[index]}
+          getItem={(_: any, index: number) => images[index]}
           getItemCount={() => images.length}
-          getItemLayout={(_, index) => ({
+          getItemLayout={(_: any, index: number) => ({
             length: SCREEN_WIDTH,
             offset: SCREEN_WIDTH * index,
             index,
           })}
-          renderItem={({ item: image }) => (
+          renderItem={({ item: image }: { item: ImageSource }) => (
             <ImageItem
               onZoom={onZoom}
               image={image}
