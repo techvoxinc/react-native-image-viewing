@@ -53,7 +53,7 @@ const ImageItem = ({
   delayLongPress,
   swipeToCloseEnabled = true,
   doubleTapToZoomEnabled = true,
-  webViewSupportedMimeTypes
+  webViewSupportedMimeTypes,
 }: Props) => {
   const scrollViewRef = useRef<ScrollView>(null);
   const [loaded, setLoaded] = useState(false);
@@ -147,6 +147,9 @@ const ImageItem = ({
               source={{ uri: image.preview || image.uri }}
               style={imageStylesWithOpacity}
               onLoad={() => setLoaded(true)}
+              onError={(e) => {
+                console.error("Image loading error:", e.nativeEvent.error);
+              }}
             />
           )}
         </TouchableWithoutFeedback>

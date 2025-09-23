@@ -128,12 +128,15 @@ const ImageItem = ({
         onScrollEndDrag,
       })}
     >
-        <Animated.Image
-          {...panHandlers}
-          source={{ uri: image.preview || image.uri  }}
-          style={imageStylesWithOpacity}
-          onLoad={onLoaded}
-        />
+      <Animated.Image
+        {...panHandlers}
+        source={{ uri: image.preview || image.uri }}
+        style={imageStylesWithOpacity}
+        onLoad={onLoaded}
+        onError={(e) => {
+          console.error("Image loading error:", e.nativeEvent.error);
+        }}
+      />
       {(!isLoaded || !imageDimensions) && <ImageLoading />}
     </Animated.ScrollView>
   );
