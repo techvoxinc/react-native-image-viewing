@@ -52,7 +52,9 @@ const ImageDefaultHeader = ({
     try {
       const res = await downloadResumable.downloadAsync();
       res && (await Sharing.shareAsync(res.uri));
-    } catch (e) {}
+    } catch (e) {
+      console.error("Error sharing file:", e);
+    }
   };
 
   return (
