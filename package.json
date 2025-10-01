@@ -1,6 +1,6 @@
 {
   "name": "@techvox/react-native-image-viewing",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "React Native modal component for viewing images as a sliding gallery",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -21,9 +21,12 @@
     "postversion": "yarn build"
   },
   "peerDependencies": {
-    "react": ">=16.11.0",
-    "react-native": ">=0.60.0",
-    "react-native-webview": "13.0.0"
+    "expo-file-system": "^19.0.0 || ^20.0.0 || ^21.0.0",
+    "expo-media-library": "^18.0.0 || ^19.0.0 || ^20.0.0",
+    "expo-sharing": "^14.0.0 || ^15.0.0 || ^16.0.0",
+    "react": ">=18.11.0",
+    "react-native": ">=0.70.0",
+    "react-native-webview": "^13.0.0"
   },
   "files": [
     "dist",
@@ -38,17 +41,18 @@
   "homepage": "https://github.com/jobtoday/react-native-image-viewing#readme",
   "devDependencies": {
     "@babel/runtime": "7.25.6",
-    "@types/react": "18.3.5",
+    "@types/react": "~19.1.10",
     "@types/react-native": "0.72.8",
-    "react": "18.2.0",
-    "react-native": "0.73.9",
-    "typescript": "5.6.2"
+    "expo-file-system": "~19.0.16",
+    "expo-media-library": "18.2.0",
+    "expo-sharing": "14.0.7",
+    "react": "19.1.0",
+    "react-native": "0.81.4",
+    "react-native-webview": "13.15.0",
+    "typescript": "~5.9.2"
   },
   "dependencies": {
-    "expo-file-system": "15.9.0",
-    "expo-media-library": "15.9.0",
-    "expo-sharing": "11.10.0",
-    "react-native-webview": "13.12.2"
+    "react-native-safe-area-context": "^5.6.1"
   },
   "directories": {
     "example": "example"

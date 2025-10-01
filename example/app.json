@@ -3,7 +3,6 @@
     "name": "React Native Image Viewing",
     "slug": "react-native-image-viewing",
     "description": "React Native modal image view with pinch zoom",
-    "privacy": "public",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
