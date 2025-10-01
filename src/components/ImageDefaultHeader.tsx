@@ -9,14 +9,14 @@
 import React, { useState } from "react";
 import {
   StyleSheet,
-  SafeAreaView,
   View,
   Text,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import * as FileSystem from "expo-file-system";
+import { File, Directory, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type Props = {
   title?: string;
@@ -35,25 +35,20 @@ const ImageDefaultHeader = ({
   const [loading, setLoading] = useState(false);
   const COLOR_WHITE = "#FFF";
 
-  const callback = (downloadProgress: any) => {
-    const progress =
-      downloadProgress.totalBytesWritten /
-      downloadProgress.totalBytesExpectedToWrite;
-    setLoading(progress !== 1);
-  };
-
   const shareFile = async (image: any) => {
-    const downloadResumable = FileSystem.createDownloadResumable(
-      image.uri,
-      `${FileSystem.documentDirectory}${image.filename}`,
-      {},
-      callback
-    );
+    const destination = new Directory(Paths.cache);
+    setLoading(true);
     try {
-      const res = await downloadResumable.downloadAsync();
-      res && (await Sharing.shareAsync(res.uri));
+      if (!destination.exists) {
+        destination.create();
+      }
+      const res = await File.downloadFileAsync(image.uri, destination);
+      res.exists && (await Sharing.shareAsync(res.uri));
     } catch (e) {
       console.error("Error sharing file:", e);
+    } finally {
+      setLoading(false);
+      destination.delete();
     }
   };
 

@@ -7,15 +7,9 @@
  */
 
 import React, { useState } from "react";
-import {
-  Alert,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  View
-} from "react-native";
+import { Alert, Platform, StatusBar, StyleSheet, View } from "react-native";
 import memoize from "lodash/memoize";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import ImageViewing from "../src/ImageViewing";
 import ImageList from "./components/ImageList";
@@ -44,7 +38,7 @@ export default function App() {
     images.map((image) =>
       typeof image.original === "number"
         ? image.original
-        : {...image, uri: image.original as string}
+        : { ...image, uri: image.original as string }
     )
   );
   const onLongPress = (image) => {
@@ -63,9 +57,7 @@ export default function App() {
         onPress={(index) => onSelect(architecture, index)}
         shift={0.75}
       />
-      <View style={styles.about}>
-
-      </View>
+      <View style={styles.about}></View>
       <ImageViewing
         images={getImageSource(images)}
         imageIndex={currentImageIndex}
